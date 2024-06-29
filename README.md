@@ -18,28 +18,28 @@ sudo nano /etc/netplan/01-network-manager-all.yaml
 ---
 **Controller**
 ```yml
-network: 
-	version: 2 
-	renderer: NetworkManager 
-	ethernets: 
-		enp0s3: 
-			dhcp4: no 
-			addresses: [192.168.43.10/24] 
-			gateway4: 192.168.43.1 
-			nameservers: addresses: [8.8.8.8, 8.8.4.4]
+network:
+   version: 2 
+   renderer: NetworkManager 
+   ethernets:
+      enp0s3: 
+      dhcp4: no 
+      addresses: [192.168.43.10/24] 
+      gateway4: 192.168.43.1 
+      nameservers: addresses: [8.8.8.8, 8.8.4.4]
 ```
 
 **Worker**
 ```yml
 network: 
-	version: 2 
-	renderer: NetworkManager 
-	ethernets: 
-		enp0s3: 
-			dhcp4: no 
-			addresses: [192.168.43.11/24] 
-			gateway4: 192.168.43.1 
-			nameservers: addresses: [8.8.8.8, 8.8.4.4]
+   version: 2 
+   renderer: NetworkManager
+   ethernets: 
+      enp0s3: 
+      dhcp4: no 
+      addresses: [192.168.43.11/24] 
+      gateway4: 192.168.43.1 
+      nameservers: addresses: [8.8.8.8, 8.8.4.4]
 ```
 ---
 
@@ -100,31 +100,31 @@ CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inv
 Controllare ora la configurazione del file ```inventory/mycluster/hosts.yml```
 ```yml 
 all:
-	hosts: 
-		node1: 
-			ansible_host: 192.168.43.10 
-			ip: 192.168.43.10 
-			access_ip: 192.168.43.10 
-			node2: 
-				ansible_host: 192.168.43.11 
-				ip: 192.168.43.11 
-				access_ip: 192.168.43.11 
-			children: 
-				kube_control_plane: 
-					hosts: 
-						node1: 
-				kube_node: 
-					hosts: 
-						node2: 
-				etcd: 
-					hosts: 
-						node1: 
-				k8s_cluster: 
-					children: 
-						kube_control_plane: 
-						kube_node: 
-				calico_rr: 
-					hosts: {}
+   hosts: 
+      node1: 
+         ansible_host: 192.168.43.10
+         ip: 192.168.43.10 
+         access_ip: 192.168.43.10 
+      node2: 
+         ansible_host: 192.168.43.11
+         ip: 192.168.43.11
+         access_ip: 192.168.43.11
+   children: 
+      kube_control_plane:
+         hosts:
+            node1:
+      kube_node: 
+         hosts:
+            node2:
+      etcd:
+         hosts:
+            node1:
+      k8s_cluster: 
+         children: 
+            kube_control_plane:
+            kube_node: 
+      calico_rr: 
+         hosts: {}
 ```
 Modificare il file ```inventory/mycluster/group_vars/all/all.yml```
 ```yml 
