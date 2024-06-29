@@ -129,8 +129,8 @@ all:
 Modificare il file ```inventory/mycluster/group_vars/all/all.yml```
 ```yml 
 upstream_dns_servers:
-	- 8.8.8.8
-	- 8.8.4.4
+   - 8.8.8.8
+   - 8.8.4.4
 ```
 Modificare le seguenti righe del file ```inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml```
 ```yml 
