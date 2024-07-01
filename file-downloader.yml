@@ -1,0 +1,159 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: file-downloader-dc
+spec:
+  containers:
+  - name: downloader
+    image: busybox:latest
+    command: ["sh", "-c"]
+    args:
+      - while true; do
+          if wget -qO- http://file-server/books/dante_alighieri/divina_commedia.txt > /dev/null; then
+            echo "OK - File downloaded successfully";
+          else
+            echo "ERROR - File download failed";
+          fi;
+          sleep 0.002;
+        done;
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: file-downloader-wh
+spec:
+  containers:
+  - name: downloader
+    image: busybox:latest
+    command: ["sh", "-c"]
+    args:
+      - while true; do
+          if wget -qO- http://file-server/books/emily_bronte/wuthering_heights.txt > /dev/null; then
+            echo "OK - File downloaded successfully";
+          else
+            echo "ERROR - File download failed";
+          fi;
+          sleep 0.002;
+        done;
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: file-downloader-tpofdg
+spec:
+  containers:
+  - name: downloader
+    image: busybox:latest
+    command: ["sh", "-c"]
+    args:
+      - while true; do
+          if wget -qO- http://file-server/books/oscar_wilde/the_picture_of_dorian_gray.txt > /dev/null; then
+            echo "OK - File downloaded successfully";
+          else
+            echo "ERROR - File download failed";
+          fi;
+          sleep 0.002;
+        done;
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: file-downloader-acc
+spec:
+  containers:
+  - name: downloader
+    image: busybox:latest
+    command: ["sh", "-c"]
+    args:
+      - while true; do
+          if wget -qO- http://file-server/books/charles_dickens/a_christmas_carol.txt > /dev/null; then
+            echo "OK - File downloaded successfully";
+          else
+            echo "ERROR - File download failed";
+          fi;
+          sleep 0.002;
+        done;
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: file-downloader-atoftc
+spec:
+  containers:
+  - name: downloader
+    image: busybox:latest
+    command: ["sh", "-c"]
+    args:
+      - while true; do
+          if wget -qO- http://file-server/books/charles_dickens/a_tale_of_two_cities.txt > /dev/null; then
+            echo "OK - File downloaded successfully";
+          else
+            echo "ERROR - File download failed";
+          fi;
+          sleep 0.002;
+        done;
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: file-downloader-daco
+spec:
+  containers:
+  - name: downloader
+    image: busybox:latest
+    command: ["sh", "-c"]
+    args:
+      - while true; do
+          if wget -qO- http://file-server/books/charles_dickens/david_copperfield.txt > /dev/null; then
+            echo "OK - File downloaded successfully";
+          else
+            echo "ERROR - File download failed";
+          fi;
+          sleep 0.002;
+        done;
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: file-downloader-ht
+spec:
+  containers:
+  - name: downloader
+    image: busybox:latest
+    command: ["sh", "-c"]
+    args:
+      - while true; do
+          if wget -qO- http://file-server/books/charles_dickens/hard_times.txt > /dev/null; then
+            echo "OK - File downloaded successfully";
+          else
+            echo "ERROR - File download failed";
+          fi;
+          sleep 0.002;
+        done;
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: file-downloader-ld
+spec:
+  containers:
+  - name: downloader
+    image: busybox:latest
+    command: ["sh", "-c"]
+    args:
+      - while true; do
+          if wget -qO- http://file-server/books/charles_dickens/little_dorrit.txt > /dev/null; then
+            echo "OK - File downloaded successfully";
+          else
+            echo "ERROR - File download failed";
+          fi;
+          sleep 0.002;
+        done;
+  restartPolicy: Always
