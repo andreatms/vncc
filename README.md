@@ -1,4 +1,4 @@
-# Utilizzo dello strumento software Terraform per lo sviluppo di applicativo su cluster Kubernetes
+# Utilizzo dello strumento software Terraform per lo sviluppo di un applicativo su cluster Kubernetes
 
 Progetto di Virtual Network and Cloud Computing
 
