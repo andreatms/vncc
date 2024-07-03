@@ -18,28 +18,28 @@ sudo nano /etc/netplan/01-network-manager-all.yaml
 ---
 **Controller**
 ```yml
-network:
-   version: 2 
-   renderer: NetworkManager 
-   ethernets:
-      enp0s3: 
-      dhcp4: no 
-      addresses: [192.168.43.10/24] 
-      gateway4: 192.168.43.1 
-      nameservers: addresses: [8.8.8.8, 8.8.4.4]
+network: 
+	version: 2 
+	renderer: NetworkManager 
+	ethernets: 
+		enp0s3: 
+			dhcp4: no 
+			addresses: [192.168.43.10/24] 
+			gateway4: 192.168.43.1 
+			nameservers: addresses: [8.8.8.8, 8.8.4.4]
 ```
 
 **Worker**
 ```yml
 network: 
-   version: 2 
-   renderer: NetworkManager
-   ethernets: 
-      enp0s3: 
-      dhcp4: no 
-      addresses: [192.168.43.11/24] 
-      gateway4: 192.168.43.1 
-      nameservers: addresses: [8.8.8.8, 8.8.4.4]
+	version: 2 
+	renderer: NetworkManager 
+	ethernets: 
+		enp0s3: 
+			dhcp4: no 
+			addresses: [192.168.43.11/24] 
+			gateway4: 192.168.43.1 
+			nameservers: addresses: [8.8.8.8, 8.8.4.4]
 ```
 ---
 
@@ -100,37 +100,37 @@ CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inv
 Controllare ora la configurazione del file ```inventory/mycluster/hosts.yml```
 ```yml 
 all:
-   hosts: 
-      node1: 
-         ansible_host: 192.168.43.10
-         ip: 192.168.43.10 
-         access_ip: 192.168.43.10 
-      node2: 
-         ansible_host: 192.168.43.11
-         ip: 192.168.43.11
-         access_ip: 192.168.43.11
-   children: 
-      kube_control_plane:
-         hosts:
-            node1:
-      kube_node: 
-         hosts:
-            node2:
-      etcd:
-         hosts:
-            node1:
-      k8s_cluster: 
-         children: 
-            kube_control_plane:
-            kube_node: 
-      calico_rr: 
-         hosts: {}
+	hosts: 
+		node1: 
+			ansible_host: 192.168.43.10 
+			ip: 192.168.43.10 
+			access_ip: 192.168.43.10 
+			node2: 
+				ansible_host: 192.168.43.11 
+				ip: 192.168.43.11 
+				access_ip: 192.168.43.11 
+			children: 
+				kube_control_plane: 
+					hosts: 
+						node1: 
+				kube_node: 
+					hosts: 
+						node2: 
+				etcd: 
+					hosts: 
+						node1: 
+				k8s_cluster: 
+					children: 
+						kube_control_plane: 
+						kube_node: 
+				calico_rr: 
+					hosts: {}
 ```
 Modificare il file ```inventory/mycluster/group_vars/all/all.yml```
 ```yml 
 upstream_dns_servers:
-   - 8.8.8.8
-   - 8.8.4.4
+	- 8.8.8.8
+	- 8.8.4.4
 ```
 Modificare le seguenti righe del file ```inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml```
 ```yml 
@@ -202,3 +202,54 @@ Creare il metric server
 ```bash
 kubectl apply -f ./components.yaml
 ```
+## Setup Terraform
+Aggiungere la repository di Hashicorp
+```bash
+wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update
+```
+Installare Terraform
+```bash
+sudo apt install terraform
+```
+Verificare l'avvenuta installazione tramite il comando
+```bash
+terraform -help
+```
+
+## Deploy del progetto Terraform
+Per prima cosa è necessario creare un file ```terraform.tfvars``` in cui vengono dichiarate le seguenti variabili
+```
+host                   = "https://127.0.0.1:6443"
+client_certificate     = "LS0tLS1..."
+client_key             = "LS0tLS1..."
+cluster_ca_certificate = "LS0tLS1..."
+```
+Per visualizzare i valore da inserire è sufficiente utilizzare il comando
+ ```bash
+kubectl config view --minify --flatten
+```
+
+
+Per creare il progetto è necessario eseguire i seguenti comandi nella directory in cui sono posizionati i file  ```file_server.tf``` (o qualsiasi altro ```.tf```)  e ```terraform.tfvars```
+#### Inizializzazione del ambiente Terraform
+```bash
+terraform init
+```
+#### Pianificazione
+```bash
+terraform plan
+```
+Tramite questo comando, Terraform andrà ad elencare le modifiche che verranno applicate al progetto tramite il comando successivo.
+#### Creazione/Modifica
+```bash
+terraform apply
+```
+Questo comando mostrerà nuovamente le modifiche che verranno eseguite dopo aver confermato l'invio del comando tramite la stringa ```yes```. 
+
+#### Eliminazione
+```bash
+terraform destroy
+```
+Tramite questo comando è possibile rilasciare tutte le risorse gestite dal progetto Terraform.
